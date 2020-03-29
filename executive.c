@@ -6,7 +6,7 @@
 #include <sys/wait.h>
 #include <string.h>
 #include <string>
-
+#include <errno.h>
 #define BSIZE 256
 
 using namespace std;
@@ -24,7 +24,6 @@ void executive(char ***argv, int background, char **env)
 	}
     else if (pid==0)
     {
-		errno = 0;
 		if (execvpe(**argv, *argv, env)==-1)
         {
 			printf("error: %s\n",strerror(errno));
