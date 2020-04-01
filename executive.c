@@ -12,14 +12,12 @@
 #include <termios.h>
 #include <string>
 #include <errno.h>
-#define BSIZE 256
-#define true 1
-#define false 0
+#include <algorithm>
+#include <time.h>
+
+#define BYTESIZE 256
 
 using namespace std;
-
-
-
 
 void executive(char ***argv, int background, char **env)
 {
