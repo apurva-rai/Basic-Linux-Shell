@@ -6,6 +6,19 @@
 
 int fd;
 
+struct Job {
+	pid_t pid;
+	int id;
+	char cmd [300];
+};
+
+static struct Job jobs[64];
+int job_count = 0;
+
+
+
+
+
 void menu()
 {
     printf("\e[1;1H\e[2J"); //Clear console
@@ -111,10 +124,24 @@ int main (int argc, char **argv, char **envp)
 		}
         else if (strncmp(buff, "jobs",4)==0)
         {
-            printf("You have reached this side.\n\n");
-			display_jobs();
+            printf("\nCurrent Jobs:\n");
+		    printf("Job ID, PID, Command\n\n");
+		    for(int i=0; i < job_count; i++)
+            {
+			             if(waitpid(jobs[i].pid, NULL, WNOHANG) == 0 || (kill(jobs[i].pid, 0) == 0))
+                         {
+				                         printf("[%d] %d || %s\n\n", jobs[i].id, jobs[i].pid, jobs[i].cmd);
+			             }
+		    }
+		    printf("\n");
 			continue;
 		}
+
+	/*----------
+		RUNNING
+		EXECUTABLES
+	-----------*/
+
         else
         {
 			system(buff);

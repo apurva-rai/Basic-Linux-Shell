@@ -6,8 +6,10 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <sys/wait.h>
+#include <sys/mman.h>
 #include <string.h>
 #include <strings.h>
+#include <signal.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <termios.h>
@@ -15,36 +17,49 @@
 #include <errno.h>
 #include <algorithm>
 #include <time.h>
+#define true 1
+#define false 0
 
 using namespace std;
 
 
-struct Job {
-    int pid;
-    int id;
-    char* cmd;
-};
-static int job_count = 0;
-static Job jobs[100];
-static char* env;
-static char* dir;
-
-
-
-
-void display_jobs()
-{
-    int i;
-    printf("\nActive jobs:\n");
-    printf("| %7s  | %7s | %7s |\n", "Job ID", "PID  ", "Command");
-    for (i=0; i < job_count; i++)
-	{
-        if (kill(jobs[i].pid, 0) == 0)
-		{
-            printf("|  [%7d] | %7d | %7s |\n", jobs[i].id, jobs[i].pid, jobs[i].cmd);
-        }
-    }
-}
+// struct Job {
+// 	pid_t pid;
+// 	int id;
+// 	char cmd [300];
+// };
+//
+// static char* env;
+// static char* dir;
+// static struct Job jobs[64];
+// int job_count = 0;
+//
+//
+//
+//
+//
+// void display_jobs()
+// {
+// 	printf("\nCurrent Jobs:\n");
+// 	printf("Job ID, PID, Command\n\n");
+//
+// 		for(int i=0; i < job_count; i++){
+// 			if(waitpid(jobs[i].pid, NULL, WNOHANG) == 0 || (kill(jobs[i].pid, 0) == 0)){
+// 				printf("[%d] %d || %s\n\n", jobs[i].id, jobs[i].pid, jobs[i].cmd);
+// 			}
+// 		}
+// 	printf("\n");
+    // int i;
+    // printf("\nActive jobs:\n");
+    // printf("| %7s  | %7s | %7s |\n", "Job ID", "PID  ", "Command");
+    // for (i=0; i < job_count; i++)
+	// {
+    //     if (kill(jobs[i].pid, 0) == 0)
+	// 	{
+    //         printf("|  [%7d] | %7d | %7s |\n", jobs[i].id, jobs[i].pid, jobs[i].cmd);
+    //     }
+    // }
+//}
 
 
 void executive1(char ***argv, int background, char **env, char* input)
@@ -61,6 +76,7 @@ void executive1(char ***argv, int background, char **env, char* input)
 	}
     else if (pid==0)
     {
+		errno = 0;
 		if (execvpe(**argv, *argv, env)==-1)
         {
 			printf("error: %s\n",strerror(errno));
@@ -73,13 +89,14 @@ void executive1(char ***argv, int background, char **env, char* input)
         {
 			while (wait(&fds) != pid)
             {
-				struct Job new_job = {.pid = pid, .id = job_count, .cmd = bg_command};
-				jobs[job_count] = new_job;
-				job_count++;
-				//while(waitid(pid, NULL, WNOHANG | WEXITED) > 0)
-				//{
 
-				//}
+				 // struct Job new_job = {.pid = pid, .id = job_count, .cmd = bg_command};
+				 // jobs[job_count] = new_job;
+				 // job_count++;
+				// while(wait(0))
+				// {
+				//
+				// }
             }
 		}
         else
