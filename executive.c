@@ -31,7 +31,7 @@ struct Job {
 
 static struct Job jobs[64];
 int job_count = 0;
-
+void parse_Input(char* command);
 //
 // static char* env;
 // static char* dir;
@@ -66,6 +66,129 @@ int job_count = 0;
 //}
 
 
+void execBackgroundFunction(char* command){
+	pid_t pid;
+	int status;
+
+	pid = fork();
+
+	//remove the &
+	int j, commandlen = strlen(command);
+	for (int i=j=0; i < commandlen; i++){
+		if(command[i] != '&'){
+			command[j++] = command[i];
+		}
+	}
+	command[j-1] = '\0';
+
+	if(pid < 0){
+		printf("Error in executing background function");
+		exit(0);
+	}
+	if(pid == 0){
+		//child process
+		printf("\n[%d] %d running in background\n", job_count, getpid());
+		parse_Input(command);
+		printf("\n[%d] %d finished %s\nQUASH: %s : ", job_count, getpid(), command, getcwd(NULL,1024));
+		exit(0);
+	}
+	else {
+
+		struct Job new_job;
+		new_job.pid = pid;
+		new_job.id = job_count;
+		strcpy(new_job.cmd,command);
+
+		jobs[job_count] = new_job;
+		job_count++;
+
+	}
+	//waitpid(-1,NULL,WNOHANG);
+	waitpid(pid, &status, WNOHANG);
+}
+
+void parse_Input(char* command)
+{
+
+			/*------------------------
+			Check for background process
+			--------------------------*/
+
+				pid_t pid;
+				pid = fork();
+				int status;
+				char* args;
+
+				if (pid == 0) {
+					while ((command[0]) == ' ') {
+						command++;
+					}
+
+					command[strlen(command)] = '\0';
+
+					// check to see if there is an execuatable
+					//args = index(command, ' ');
+					if (index(command, ' ') == NULL) {
+						args = NULL;
+					}
+					else {
+						args = index(command, ' ');
+						args++;
+
+						// if there is an accedential space
+						if (args[0] == '\0') {
+							command[strlen(command)-1] ='\0';
+							args = NULL;
+						}
+						else {
+							args[strlen(args)] = '\0';
+						}
+
+
+					}
+
+					if (args == NULL) {
+
+						int success = execlp(command, command, NULL);
+						if (success == -1) {
+							printf("\nInvalid Command\nExecutable not found.\n");
+							exit(0);
+						}
+					}
+
+					/*----------
+						WITH
+						ARGS
+					-----------*/
+					else {
+						char* action;
+						//char space[] = ' ';
+						int i = 0;
+
+						action = strtok(command, " ");
+						action[strlen(action)] = '\0';
+						args[strlen(args)] = '\0';
+
+						int success = execlp(action, action, args, (char *)NULL);
+						//char* enviro = getenv("PATH");
+						//int success = execve(action, *args, envp[i]);
+
+						if (success == -1) {
+							printf("\nInvalid Command\nPerhaps the wrong arguments\nOr executable not found\n");
+							exit(0);
+						}
+					}
+				}
+				else {
+					wait(&status);
+				}
+				waitpid(pid, &status, 0);
+}
+
+
+
+
+
 void executive1(char ***argv, int background, char **env, char* input)
 {
 	char* bg_command = strdup(input);
@@ -94,9 +217,9 @@ void executive1(char ***argv, int background, char **env, char* input)
 			while (wait(&fds) != pid)
             {
 
-				  struct Job new_job = {.pid = pid, .id = job_count, .cmd = bg_command};
-				  jobs[job_count] = new_job;
-				  job_count++;
+				  // struct Job new_job = {.pid = pid, .id = job_count, .cmd = bg_command};
+				  // jobs[job_count] = new_job;
+				  // job_count++;
 				// while(wait(0))
 				// {
 				//

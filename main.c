@@ -55,12 +55,16 @@ int main (int argc, char **argv, char **envp)
 		// printf("pipe        :%s\n",pipeU);
 		// printf("in from file:%s\n", input);
 		// printf("out to file :%s\n", output);
-        printf("%s",buff);
+        //printf("%s",buff);
 		if ((strncmp(buff,"exit",4)==0) || (strncmp(buff,"quit",4)==0))
         {
 			break;
 		// cd
 		}
+        if(index(buff, '&') != NULL)
+        {
+                     execBackgroundFunction(buff);
+        }
         else if (strncmp(buff, "cd", 2) == 0)
         {
 			cd(buff);
@@ -111,17 +115,19 @@ int main (int argc, char **argv, char **envp)
 		}
         else if (strncmp(buff, "jobs",4)==0)
         {
-            printf("\nCurrent Jobs:\n");
-		    printf("Job ID, PID, Command\n\n");
-		    for(int i=0; i < job_count; i++)
-            {
-			             if(waitpid(jobs[i].pid, NULL, WNOHANG) == 0 || (kill(jobs[i].pid, 0) == 0))
-                         {
-				                         printf("[%d] %d || %s\n\n", jobs[i].id, jobs[i].pid, jobs[i].cmd);
-			             }
-		    }
-		    printf("\n");
-			continue;
+            if(strncmp(buff,"jobs",4) == 0)
+        	{
+        		printf("\nCurrent Jobs:\n");
+        		printf("Job ID, PID, Command\n\n");
+        		for(int i=0; i < job_count; i++)
+        		{
+        			if(waitpid(jobs[i].pid, NULL, WNOHANG) == 0 || (kill(jobs[i].pid, 0) == 0))
+        			{
+        				printf("[%d] %d || %s\n\n", jobs[i].id, jobs[i].pid, jobs[i].cmd);
+        			}
+        		}
+        		printf("\n");
+        	}
 		}
 
 	/*----------
