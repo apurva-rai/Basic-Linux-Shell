@@ -31,8 +31,8 @@ int main (int argc, char **argv, char **envp)
 {
 
     menu();
-    command* c1;
-	command* c2;
+    commandSignal* c1;
+	commandSignal* c2;
     char *buff;
 	char **env;
     char line[BYTESIZE];
@@ -121,7 +121,7 @@ int main (int argc, char **argv, char **envp)
             {
 				// standard command
 				printf("<standard command>\n");
-				c1 = parse_raw_input(buff, env);
+				c1 = parse(buff, env);
 				executive1(&((*c1).argv), (*c1).run_in_background, (*c1).env);
 				// Reset variables
 				memset(c1, 0, sizeof(*c1));
@@ -141,8 +141,8 @@ int main (int argc, char **argv, char **envp)
 				token = strtok(buff, "|\n");
 				char secondStr[BYTESIZE];
 				strcpy(secondStr,token);
-				c1 = parse_raw_input(firstStr, env);
-				c2 = parse_raw_input(secondStr, env);
+				c1 = parse(firstStr, env);
+				c2 = parse(secondStr, env);
 				pipeFunc(&((*c1).argv), (*c1).run_in_background, (*c1).env, &((*c2).argv), (*c2).run_in_background, (*c2).env);
 				free(c1);
 				free(c2);
@@ -164,7 +164,7 @@ int main (int argc, char **argv, char **envp)
 				char firstStr[256];
 				strcpy(firstStr, token);
 				printf("first string  :%s\n",firstStr);
-				c1 = parse_raw_input(firstStr, env);
+				c1 = parse(firstStr, env);
 				// Advance token to get input file
 				char secondStr[256];
 				token = strtok(NULL, "<\n");
@@ -211,7 +211,7 @@ int main (int argc, char **argv, char **envp)
 				}
 
 				// parse buffs
-				c1 = parse_raw_input(firstStr, env);
+				c1 = parse(firstStr, env);
 				// Execute the command and output the result to a file
 				inFile(&((*c1).argv), (*c1).run_in_background, (*c1).env, secondStr);
 
