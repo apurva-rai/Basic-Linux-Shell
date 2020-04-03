@@ -62,33 +62,44 @@ int main (int argc, char **argv, char **envp)
                 printf("input redirection, read input from file\n");
 				strncpy(name, input+2, strlen(buff)-1);
 				fd = open(name, O_RDONLY);
+        FILE *fopen(name,"r");
+
+        char lineInput[BYTESIZE];
+
+        while (fgets(lineInput, sizeof(lineInput), fopen)) {
+          printf("%s", lineInput);
+          system(lineInput);
+         }
                 //printf("%s",name);
-				#if 0
-				// Tokenize to remove '<' and '\n', getting first the command
-				char *token = strtok(buff, "<\n");
-				char firstStr[BYTESIZE];
-				strcpy(firstStr, token);
-				// Advance token to get input file
-				char secondStr[BYTESIZE];
-				token = strtok(NULL, "<\n");
-				if (token!=NULL)
-                {
-					strcpy(secondStr, token);
-				}
+				// #if 0
+				// // Tokenize to remove '<' and '\n', getting first the command
+				// char *token = strtok(buff, "<\n");
+				// char firstStr[BYTESIZE];
+				// strcpy(firstStr, token);
+				// // Advance token to get input file
+				// char secondStr[BYTESIZE];
+				// token = strtok(NULL, "<\n");
+				// if (token!=NULL)
+        //         {
+				// 	strcpy(secondStr, token);
+				// }
+        //
+				// // parse buffs
+				// c1 = parse(firstStr, env);
+				// // Execute the command and output the result to a file
+				// inFile(&((*c1).argv), (*c1).run_in_background, (*c1).env, secondStr);
+        //
+				// // Reset variables
+				// memset(firstStr, '\0', sizeof(char) * BYTESIZE);
+				// memset(secondStr, '\0', sizeof(char) * BYTESIZE);
+				// memset(buff, '\0', sizeof(buff));
+				// free(c1);
+				// c1 = NULL;
+        //
+        // #endif
 
-				// parse buffs
-				c1 = parse(firstStr, env);
-				// Execute the command and output the result to a file
-				inFile(&((*c1).argv), (*c1).run_in_background, (*c1).env, secondStr);
+        fclose(fopen);
 
-				// Reset variables
-				memset(firstStr, '\0', sizeof(char) * BYTESIZE);
-				memset(secondStr, '\0', sizeof(char) * BYTESIZE);
-				memset(buff, '\0', sizeof(buff));
-				free(c1);
-				c1 = NULL;
-
-				#endif
 				continue;
         }
 		if ((strncmp(buff,"exit",4)==0) || (strncmp(buff,"quit",4)==0))
