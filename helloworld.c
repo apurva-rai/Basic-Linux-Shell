@@ -9,7 +9,17 @@
 #include <string.h>    /* needed for mitch reasons */
 #include <fcntl.h>     /* needed for output redirection */
 #include <wait.h>
+#include <limits>
 
 int main() {
-    printf("Hello World\n");
+
+int i = INT_MIN;
+  while(i < INT_MAX){
+
+    if(i%1000000000 == 0) printf("Test");
+    i++;
+  }
+
+  return(0);
+
 }
