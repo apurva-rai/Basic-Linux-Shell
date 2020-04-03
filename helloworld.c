@@ -14,9 +14,9 @@
 int main() {
 
 int i = INT_MIN;
-  while(i < INT_MAX){
+  while(1){
 
-    if(i%1000000000 == 0) printf("Test");
+    if(i%1000000000 == 0 && i < INT_MAX) printf("Test");
     i++;
   }
 

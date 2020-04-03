@@ -1,5 +1,5 @@
 cd
 pwd
-cd /usr
+cd /user
 pwd
-quit
+exit

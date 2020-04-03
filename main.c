@@ -20,15 +20,16 @@ void menu()
 
 /* Handles reading input from prompt
  */
-char* firstParse(char* line, int& inFile)
+char* firstParse()
 {
-	inFile = read(fd, line, BYTESIZE);
-	if (inFile <= 0)
-	{
-		close(fd);
-		read(0, line, BYTESIZE);
-	}
-	return line;
+    char* inputLine = NULL; //Get command line input from user
+char* removeNewLine;
+size_t charNum = 0;
+size_t size = 0; //Initial size for all arrays
+charNum = getline(&inputLine, &size, stdin);
+removeNewLine = strchr(inputLine, '\n');
+if (removeNewLine) *removeNewLine = 0; //gets rid of the newline char
+return(inputLine);
 }
 
 int main (int argc, char **argv, char **envp)
@@ -53,7 +54,7 @@ int main (int argc, char **argv, char **envp)
 		printf("%s> ",getcwd(NULL,0));
 		fflush(stdout);
 		memset(line, '\0', sizeof(line));
-		buff = firstParse(line, inFile);
+		buff = firstParse();
 		pipeU = strpbrk(buff, "|");
 		input = strpbrk(buff, "<");
 		output = strpbrk(buff, ">");
@@ -236,6 +237,8 @@ int main (int argc, char **argv, char **envp)
                 char *token = strtok(buff, "<\n");
                 char firstStr[BYTESIZE];
                 strcpy(firstStr, token);
+                printf("%s",firstStr);
+                printf("%s",secondStr);
                 // Advance token to get input file
                 char secondStr[BYTESIZE];
                 token = strtok(NULL, "<\n");
