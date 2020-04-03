@@ -108,7 +108,7 @@ int main (int argc, char **argv, char **envp)
 			continue;
 		// jobs
 		}
-        else if (strncmp(buff, "jobs", 4)==0)
+        else if (strcmp(buff, "jobs\n")==0)
         {
 			display_jobs();
 			continue;
