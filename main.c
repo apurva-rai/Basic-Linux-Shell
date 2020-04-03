@@ -39,9 +39,9 @@ int main (int argc, char **argv, char **envp)
 	char temp[BYTESIZE];
 	int inFile = 0;
 	char* name;
-	char* input;
-	char* output;
-    char* pipeU;
+	char* input = NULL;
+	char* output = NULL;
+    char* pipeU = NULL;
 
 	while (1)
 	{
@@ -56,6 +56,41 @@ int main (int argc, char **argv, char **envp)
 		// printf("in from file:%s\n", input);
 		// printf("out to file :%s\n", output);
         //printf("%s",buff);
+        if(input!=NULL)
+        {
+
+                printf("input redirection, read input from file\n");
+				strncpy(name, input+2, strlen(buff)-1);
+				fd = open(name, O_RDONLY);
+                //printf("%s",name);
+				#if 0
+				// Tokenize to remove '<' and '\n', getting first the command
+				char *token = strtok(buff, "<\n");
+				char firstStr[BYTESIZE];
+				strcpy(firstStr, token);
+				// Advance token to get input file
+				char secondStr[BYTESIZE];
+				token = strtok(NULL, "<\n");
+				if (token!=NULL)
+                {
+					strcpy(secondStr, token);
+				}
+
+				// parse buffs
+				c1 = parse(firstStr, env);
+				// Execute the command and output the result to a file
+				inFile(&((*c1).argv), (*c1).run_in_background, (*c1).env, secondStr);
+
+				// Reset variables
+				memset(firstStr, '\0', sizeof(char) * BYTESIZE);
+				memset(secondStr, '\0', sizeof(char) * BYTESIZE);
+				memset(buff, '\0', sizeof(buff));
+				free(c1);
+				c1 = NULL;
+
+				#endif
+				continue;
+        }
 		if ((strncmp(buff,"exit",4)==0) || (strncmp(buff,"quit",4)==0))
         {
 			break;
@@ -216,36 +251,7 @@ int main (int argc, char **argv, char **envp)
 			if (input != NULL)
             {
 				// input redirection, read input from file
-				printf("input redirection, read input from file\n");
-				strncpy(name, buff+3, strlen(buff)-1);
-				fd = open(name, O_RDONLY);
-				#if 0
-				// Tokenize to remove '<' and '\n', getting first the command
-				char *token = strtok(buff, "<\n");
-				char firstStr[BYTESIZE];
-				strcpy(firstStr, token);
-				// Advance token to get input file
-				char secondStr[BYTESIZE];
-				token = strtok(NULL, "<\n");
-				if (token!=NULL)
-                {
-					strcpy(secondStr, token);
-				}
 
-				// parse buffs
-				c1 = parse(firstStr, env);
-				// Execute the command and output the result to a file
-				inFile(&((*c1).argv), (*c1).run_in_background, (*c1).env, secondStr);
-
-				// Reset variables
-				memset(firstStr, '\0', sizeof(char) * BYTESIZE);
-				memset(secondStr, '\0', sizeof(char) * BYTESIZE);
-				memset(buff, '\0', sizeof(buff));
-				free(c1);
-				c1 = NULL;
-
-				#endif
-				continue;
 			}
 
 		#endif
