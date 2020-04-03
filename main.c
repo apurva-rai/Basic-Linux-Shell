@@ -3,6 +3,8 @@
 
 #include "Parse.c"
 #include "executive.c"
+#define true 1
+#define false 0
 
 int fd;
 
@@ -12,6 +14,9 @@ void menu()
     printf("\t\tQuite a Shell\n\t\tMade by Apurva Rai and Meet Kapadia\n\t\tSee ReadMe for instructions\n");
 
 }
+
+
+
 
 /* Handles reading input from prompt
  */
@@ -56,52 +61,12 @@ int main (int argc, char **argv, char **envp)
 		// printf("in from file:%s\n", input);
 		// printf("out to file :%s\n", output);
         //printf("%s",buff);
-        if(input!=NULL)
-        {
-
-                printf("input redirection, read input from file\n");
-				strncpy(name, input+2, strlen(buff)-1);
-				fd = open(name, O_RDONLY);
-        FILE *fopen(name,"r");
-
-        char lineInput[BYTESIZE];
-
-        while (fgets(lineInput, sizeof(lineInput), fopen)) {
-          printf("%s", lineInput);
-          system(lineInput);
-         }
-                //printf("%s",name);
-				// #if 0
-				// // Tokenize to remove '<' and '\n', getting first the command
-				// char *token = strtok(buff, "<\n");
-				// char firstStr[BYTESIZE];
-				// strcpy(firstStr, token);
-				// // Advance token to get input file
-				// char secondStr[BYTESIZE];
-				// token = strtok(NULL, "<\n");
-				// if (token!=NULL)
-        //         {
-				// 	strcpy(secondStr, token);
-				// }
+        // if(input!=NULL)
+        // {
         //
-				// // parse buffs
-				// c1 = parse(firstStr, env);
-				// // Execute the command and output the result to a file
-				// inFile(&((*c1).argv), (*c1).run_in_background, (*c1).env, secondStr);
         //
-				// // Reset variables
-				// memset(firstStr, '\0', sizeof(char) * BYTESIZE);
-				// memset(secondStr, '\0', sizeof(char) * BYTESIZE);
-				// memset(buff, '\0', sizeof(buff));
-				// free(c1);
-				// c1 = NULL;
         //
-        // #endif
-
-        fclose(fopen);
-
-				continue;
-        }
+        // }
 		if ((strncmp(buff,"exit",4)==0) || (strncmp(buff,"quit",4)==0))
         {
 			break;
@@ -261,8 +226,39 @@ int main (int argc, char **argv, char **envp)
 			}
 			if (input != NULL)
             {
-				// input redirection, read input from file
+                printf("input redirection, read input from file\n");
+                strncpy(name, buff+3, strlen(buff)-1);
 
+                 fd = open(name, O_RDONLY);
+
+                #if 0
+                // Tokenize to remove '<' and '\n', getting first the command
+                char *token = strtok(buff, "<\n");
+                char firstStr[BYTESIZE];
+                strcpy(firstStr, token);
+                // Advance token to get input file
+                char secondStr[BYTESIZE];
+                token = strtok(NULL, "<\n");
+                if (token!=NULL)
+                {
+                    strcpy(secondStr, token);
+                }
+
+                // parse buffs
+                c1 = parse(firstStr, env);
+                // Execute the command and output the result to a file
+                inFile(&((*c1).argv), (*c1).run_in_background, (*c1).env, secondStr);
+
+                // Reset variables
+                memset(firstStr, '\0', sizeof(char) * BYTESIZE);
+                memset(secondStr, '\0', sizeof(char) * BYTESIZE);
+                memset(buff, '\0', sizeof(buff));
+                free(c1);
+                c1 = NULL;
+
+                #endif
+
+                continue;
 			}
 
 		#endif
