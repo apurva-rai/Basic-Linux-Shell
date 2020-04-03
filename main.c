@@ -4,6 +4,7 @@
 #include "Parse.c"
 #include "executive.c"
 
+int fd;
 
 void menu()
 {
