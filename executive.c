@@ -31,6 +31,7 @@ static char* dir;
 
 
 
+
 void display_jobs()
 {
     int i;
@@ -46,8 +47,10 @@ void display_jobs()
 }
 
 
-void executive1(char ***argv, int background, char **env)
+void executive1(char ***argv, int background, char **env, char* input)
 {
+	char* bg_command = strdup(input);
+	bg_command[strlen(input) - 1] = 0;
 	int fds;
 	pid_t pid;
 	pid = fork();
@@ -70,7 +73,13 @@ void executive1(char ***argv, int background, char **env)
         {
 			while (wait(&fds) != pid)
             {
-                //waits till the pid is not equal to fds
+				struct Job new_job = {.pid = pid, .id = job_count, .cmd = bg_command};
+				jobs[job_count] = new_job;
+				job_count++;
+				//while(waitid(pid, NULL, WNOHANG | WEXITED) > 0)
+				//{
+
+				//}
             }
 		}
         else

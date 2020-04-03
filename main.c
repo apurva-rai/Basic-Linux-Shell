@@ -55,6 +55,7 @@ int main (int argc, char **argv, char **envp)
 		// printf("pipe        :%s\n",pipeU);
 		// printf("in from file:%s\n", input);
 		// printf("out to file :%s\n", output);
+        printf("%s",buff);
 		if ((strncmp(buff,"exit",4)==0) || (strncmp(buff,"quit",4)==0))
         {
 			break;
@@ -108,8 +109,9 @@ int main (int argc, char **argv, char **envp)
 			continue;
 		// jobs
 		}
-        else if (strcmp(buff, "jobs\n")==0)
+        else if (strncmp(buff, "jobs",4)==0)
         {
+            printf("You have reached this side.\n\n");
 			display_jobs();
 			continue;
 		}
@@ -122,7 +124,7 @@ int main (int argc, char **argv, char **envp)
 				// standard command
 				printf("<standard command>\n");
 				c1 = parse(buff, env);
-				executive1(&((*c1).argv), (*c1).run_in_background, (*c1).env);
+				executive1(&((*c1).argv), (*c1).run_in_background, (*c1).env, buff);
 				// Reset variables
 				memset(c1, 0, sizeof(*c1));
 				memset(buff, '\0', sizeof(buff));
