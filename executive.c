@@ -23,11 +23,15 @@
 using namespace std;
 
 
-// struct Job {
-// 	pid_t pid;
-// 	int id;
-// 	char cmd [300];
-// };
+struct Job {
+	pid_t pid;
+	int id;
+	char cmd [300];
+};
+
+static struct Job jobs[64];
+int job_count = 0;
+
 //
 // static char* env;
 // static char* dir;

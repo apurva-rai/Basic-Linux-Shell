@@ -6,19 +6,6 @@
 
 int fd;
 
-struct Job {
-	pid_t pid;
-	int id;
-	char cmd [300];
-};
-
-static struct Job jobs[64];
-int job_count = 0;
-
-
-
-
-
 void menu()
 {
     printf("\e[1;1H\e[2J"); //Clear console
