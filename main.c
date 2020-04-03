@@ -12,6 +12,17 @@ void menu()
 
 }
 
+/* Handles reading input from prompt
+ */
+char* accept(char* line, int& fromfile) {
+	fromfile = read(fd, line, BYTESIZE);
+	if (fromfile <= 0)
+	{
+		close(fd);
+		read(0, line, BYTESIZE);
+	}
+	return line;
+}
 
 int main (int argc, char **argv, char **envp)
 
@@ -19,10 +30,10 @@ int main (int argc, char **argv, char **envp)
 
     menu();
 
-  char line[BSIZE];
+  char line[BYTESIZE];
 	char *buffer;
 	char **env;
-	char temp[BSIZE];
+	char temp[BYTESIZE];
 	int fromfile = 0;
 	char* filename;
 
@@ -129,10 +140,10 @@ int main (int argc, char **argv, char **envp)
 				printf("<pipe only>\n");
 
 				char* token = strtok(buffer, "|\n");
-				char firstStr[BSIZE];
+				char firstStr[BYTESIZE];
 				strcpy(firstStr,token);
 				token = strtok(buffer, "|\n");
-				char secondStr[BSIZE];
+				char secondStr[BYTESIZE];
 				strcpy(secondStr,token);
 				commandOne = parse_raw_input(firstStr, env);
 				commandTwo = parse_raw_input(secondStr, env);
@@ -143,9 +154,9 @@ int main (int argc, char **argv, char **envp)
 				free(commandTwo);
 				commandOne = NULL;
 				commandTwo = NULL;
-				memset(firstStr, '\0', sizeof(char) * BSIZE);
-				memset(secondStr, '\0', sizeof(char) * BSIZE);
-				memset(buffer, '\0', sizeof(char) * BSIZE);
+				memset(firstStr, '\0', sizeof(char) * BYTESIZE);
+				memset(secondStr, '\0', sizeof(char) * BYTESIZE);
+				memset(buffer, '\0', sizeof(char) * BYTESIZE);
 
 
 				continue;
@@ -171,8 +182,8 @@ int main (int argc, char **argv, char **envp)
 				execute_to_file(&((*commandOne).argv), (*commandOne).run_in_background, (*commandOne).env, secondStr);
 
 				// Reset variables
-				memset(firstStr, '\0', sizeof(char) * BSIZE);
-				memset(secondStr, '\0', sizeof(char) * BSIZE);
+				memset(firstStr, '\0', sizeof(char) * BYTESIZE);
+				memset(secondStr, '\0', sizeof(char) * BYTESIZE);
 				memset(buffer, '\0', sizeof(buffer));
 				free(commandOne);
 				commandOne = NULL;
@@ -193,10 +204,10 @@ int main (int argc, char **argv, char **envp)
 				#if 0
 				// Tokenize to remove '<' and '\n', getting first the command
 				char *token = strtok(buffer, "<\n");
-				char firstStr[BSIZE];
+				char firstStr[BYTESIZE];
 				strcpy(firstStr, token);
 				// Advance token to get input file
-				char secondStr[BSIZE];
+				char secondStr[BYTESIZE];
 				token = strtok(NULL, "<\n");
 				if (token!=NULL){
 					strcpy(secondStr, token);
@@ -208,8 +219,8 @@ int main (int argc, char **argv, char **envp)
 				execute_from_file(&((*commandOne).argv), (*commandOne).run_in_background, (*commandOne).env, secondStr);
 
 				// Reset variables
-				memset(firstStr, '\0', sizeof(char) * BSIZE);
-				memset(secondStr, '\0', sizeof(char) * BSIZE);
+				memset(firstStr, '\0', sizeof(char) * BYTESIZE);
+				memset(secondStr, '\0', sizeof(char) * BYTESIZE);
 				memset(buffer, '\0', sizeof(buffer));
 				free(commandOne);
 				commandOne = NULL;
