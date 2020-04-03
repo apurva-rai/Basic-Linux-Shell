@@ -15,7 +15,7 @@ void menu()
 
 /* Handles reading input from prompt
  */
-char* accept(char* line, int& inFile)
+char* firstParse(char* line, int& inFile)
 {
 	inFile = read(fd, line, BYTESIZE);
 	if (inFile <= 0)
@@ -48,7 +48,7 @@ int main (int argc, char **argv, char **envp)
 		printf("%s> ",getcwd(NULL,0));
 		fflush(stdout);
 		memset(line, '\0', sizeof(line));
-		buff = accept(line, inFile);
+		buff = firstParse(line, inFile);
 		pipeU = strpbrk(buff, "|");
 		input = strpbrk(buff, "<");
 		output = strpbrk(buff, ">");
@@ -104,10 +104,7 @@ int main (int argc, char **argv, char **envp)
 		}
         else if (strcmp(buff, "clear\n")==0)
         {
-			printf("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
-			printf("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
-			printf("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
-			printf("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+			printf("\e[1;1H\e[2J");
 			continue;
 		// jobs
 		}
