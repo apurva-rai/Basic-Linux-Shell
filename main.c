@@ -110,7 +110,7 @@ int main (int argc, char **argv, char **envp)
 		}
         else if (strncmp(buff, "jobs", 4)==0)
         {
-			printf("LEFT BLANK\n");
+			display_jobs();
 			continue;
 		}
         else
