@@ -52,9 +52,9 @@ int main (int argc, char **argv, char **envp)
 		pipeU = strpbrk(buff, "|");
 		input = strpbrk(buff, "<");
 		output = strpbrk(buff, ">");
-		printf("pipe        :%s\n",pipeU);
-		printf("in from file:%s\n", input);
-		printf("out to file :%s\n", output);
+		// printf("pipe        :%s\n",pipeU);
+		// printf("in from file:%s\n", input);
+		// printf("out to file :%s\n", output);
 		if ((strncmp(buff,"exit",4)==0) || (strncmp(buff,"quit",4)==0))
         {
 			break;
@@ -74,7 +74,7 @@ int main (int argc, char **argv, char **envp)
 		}
         else if (strcmp(buff, "$PATH\n")==0)
         {
-			printf("\nPATH:              %s\n\n", getenv("PATH"));
+			printf("\nPATH: %s\n\n", getenv("PATH"));
 			continue;
 		// set PATH
 		}
@@ -83,13 +83,13 @@ int main (int argc, char **argv, char **envp)
 			// skip the "set PATH="
 			buff+=9;
 			setenv("PATH",buff,1);
-			printf("PATH set to %s\n", getenv("PATH"));
+			printf("PATH was set to %s\n", getenv("PATH"));
 			continue;
 		// $HOME
 		}
         else if (strcmp(buff, "$HOME\n")==0)
         {
-			printf("\nHOME:              %s\n\n", getenv("HOME"));
+			printf("\nHOME: %s\n\n", getenv("HOME"));
 			continue;
 		// set HOME
 		}
@@ -98,7 +98,7 @@ int main (int argc, char **argv, char **envp)
 			// skip the "set HOME="
 			buff+=9;
 			setenv("HOME",buff,1);
-			printf("HOME set to %s\n", getenv("HOME"));
+			printf("HOME was set to %s\n", getenv("HOME"));
 			continue;
 		// clear
 		}
