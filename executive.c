@@ -90,9 +90,9 @@ void executive1(char ***argv, int background, char **env, char* input)
 			while (wait(&fds) != pid)
             {
 
-				 // struct Job new_job = {.pid = pid, .id = job_count, .cmd = bg_command};
-				 // jobs[job_count] = new_job;
-				 // job_count++;
+				  struct Job new_job = {.pid = pid, .id = job_count, .cmd = bg_command};
+				  jobs[job_count] = new_job;
+				  job_count++;
 				// while(wait(0))
 				// {
 				//
