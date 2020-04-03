@@ -16,9 +16,35 @@
 #include <algorithm>
 #include <time.h>
 
-
-
 using namespace std;
+
+
+struct Job {
+    int pid;
+    int id;
+    char* cmd;
+};
+static int job_count = 0;
+static Job jobs[100];
+static char* env;
+static char* dir;
+
+
+
+void display_jobs()
+{
+    int i;
+    printf("\nActive jobs:\n");
+    printf("| %7s  | %7s | %7s |\n", "Job ID", "PID  ", "Command");
+    for (i=0; i < job_count; i++)
+	{
+        if (kill(jobs[i].pid, 0) == 0)
+		{
+            printf("|  [%7d] | %7d | %7s |\n", jobs[i].id, jobs[i].pid, jobs[i].cmd);
+        }
+    }
+}
+
 
 void executive1(char ***argv, int background, char **env)
 {
@@ -95,6 +121,7 @@ int setPath(char* str)
     return 1;
 }
 
+
 char* removeWhitespace(char* str)
 {
     char *buff;
@@ -150,7 +177,8 @@ char* removeWhitespace(char* str)
 //     }
 // }
 
-// pipe output to file
+
+
 void toFile(char ***argv, int background, char **env, char* path)
 {
 	pid_t pid;
@@ -193,7 +221,7 @@ void toFile(char ***argv, int background, char **env, char* path)
 }
 
 
-// take input from file
+
 void fromFile(char ***argv, int background, char **env, char* path)
 {
 	pid_t pid;
