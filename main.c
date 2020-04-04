@@ -124,7 +124,6 @@ int main (int argc, char **argv, char **envp)
 			#if 0
 			if ((output == NULL) && (pipeU == NULL) && (input == NULL))
             {
-                printf("\n\nPIPE 3\n\n");
 				c1 = parse(buff, env);
 
 				executive1(&((*c1).argv), (*c1).run_in_background, (*c1).env, buff);
@@ -141,7 +140,6 @@ int main (int argc, char **argv, char **envp)
 			}
 			if ((output == NULL) && (pipeU != NULL) && (input == NULL))
             {
-              printf("\n\nPIPE 1\n\n");
 				char* token = strtok(buff, "|\n");
 				char firstStr[BYTESIZE];
 				strcpy(firstStr,token);
@@ -153,10 +151,6 @@ int main (int argc, char **argv, char **envp)
 
 				pipeFunc(&((*c1).argv), (*c1).run_in_background, (*c1).env, &((*c2).argv), (*c2).run_in_background, (*c2).env);
         if ((strncmp(firstStr,"exit",4)==0) || (strncmp(firstStr,"quit",4)==0))
-            {
-          break;
-        }
-        if ((strncmp(secondStr,"exit",4)==0) || (strncmp(secondStr,"quit",4)==0))
             {
           break;
         }
@@ -172,7 +166,6 @@ int main (int argc, char **argv, char **envp)
 			}
 			if ((output != NULL) && (pipeU == NULL) && (input == NULL))
             {
-                printf("\n\nPIPE 2\n\n");
 				char *token = strtok(buff, ">\n");
 				char firstStr[256];
 				strcpy(firstStr, token);
@@ -189,10 +182,7 @@ int main (int argc, char **argv, char **envp)
             {
           break;
         }
-        if ((strncmp(secondStr,"exit",4)==0) || (strncmp(secondStr,"quit",4)==0))
-            {
-          break;
-        }
+
 				memset(firstStr, '\0', sizeof(char) * BYTESIZE);
 				memset(secondStr, '\0', sizeof(char) * BYTESIZE);
 				memset(buff, '\0', sizeof(buff));
@@ -228,10 +218,7 @@ int main (int argc, char **argv, char **envp)
                     {
                   break;
                 }
-                if ((strncmp(secondStr,"exit",4)==0) || (strncmp(secondStr,"quit",4)==0))
-                    {
-                  break;
-                }
+
                 memset(firstStr, '\0', sizeof(char) * BYTESIZE);
                 memset(secondStr, '\0', sizeof(char) * BYTESIZE);
                 memset(buff, '\0', sizeof(buff));
