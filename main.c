@@ -23,6 +23,10 @@ char* firstParse(char* line, int& inFile)
 		close(fd);
 		read(0, line, BYTESIZE);
 	}
+  if ((strncmp(line,"exit",4)==0) || (strncmp(line,"quit",4)==0))
+      {
+    exit(0);
+  }
 	return line;
 }
 
