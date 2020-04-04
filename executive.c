@@ -314,6 +314,7 @@ void fromFile(char ***argv, int background, char **env, char* path)
 
 void pipeFunc(char ***argv1, int background1, char **env1, char ***argv2, int background2, char **env2)
 {
+	printf("\n\nPIPE 4 \n\n");
 	pid_t pid1, pid2;
 	int type1, type2;
 	int fds[2];
