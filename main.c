@@ -80,7 +80,7 @@ int main (int argc, char **argv, char **envp)
 			continue;
 		}
         else if (strncmp(buff, "set PATH=",9)==0)
-        {DIR* dir = opendir("mydir");
+        {DIR* dir = opendir(buff);
         if (dir) {
           buff+=9;
           setenv("PATH",buff,1);
@@ -99,7 +99,7 @@ int main (int argc, char **argv, char **envp)
 			continue;
 		}
         else if (strncmp(buff, "set HOME=",9)==0)
-        {DIR* dir = opendir("mydir");
+        {DIR* dir = opendir(buff);
           if (dir) {
           buff+=9;
           setenv("HOME",buff,1);
