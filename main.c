@@ -3,6 +3,8 @@
 
 #include "Parse.c"
 #include "executive.c"
+#include <dirent.h>
+#include <errno.h>
 #define true 1
 #define false 0
 
@@ -78,10 +80,17 @@ int main (int argc, char **argv, char **envp)
 			continue;
 		}
         else if (strncmp(buff, "set PATH=",9)==0)
-        {
-			buff+=9;
-			setenv("PATH",buff,1);
-			printf("PATH was set to %s\n", getenv("PATH"));
+        {DIR* dir = opendir("mydir");
+        if (dir) {
+          buff+=9;
+          setenv("PATH",buff,1);
+          printf("PATH was set to %s\n", getenv("PATH"));
+          closedir(dir);
+        }
+        else if (ENOENT == errno) {
+          printf("PATH was not found\n");
+        }
+
 			continue;
 		}
         else if (strcmp(buff, "$HOME\n")==0)
@@ -90,10 +99,17 @@ int main (int argc, char **argv, char **envp)
 			continue;
 		}
         else if (strncmp(buff, "set HOME=",9)==0)
-        {
-			buff+=9;
-			setenv("HOME",buff,1);
-			printf("HOME was set to %s\n", getenv("HOME"));
+        {DIR* dir = opendir("mydir");
+          if (dir) {
+          buff+=9;
+          setenv("HOME",buff,1);
+          printf("HOME was set to %s\n", getenv("HOME"));
+          closedir(dir);
+          }
+          else if (ENOENT == errno) {
+            printf("HOME was not found\n");
+          }
+
 			continue;
 		}
         else if (strcmp(buff, "clear\n")==0)
