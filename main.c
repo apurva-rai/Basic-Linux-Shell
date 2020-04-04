@@ -120,8 +120,20 @@ int main (int argc, char **argv, char **envp)
 			#if 0
 			if ((output == NULL) && (pipeU == NULL) && (input == NULL))
             {
+        if ((strncmp(buff,"exit",4)==0) || (strncmp(buff,"quit",4)==0))
+            {
+                break;
+            }
 				c1 = parse(buff, env);
+        if ((strncmp(buff,"exit",4)==0) || (strncmp(buff,"quit",4)==0))
+            {
+          break;
+        }
 				executive1(&((*c1).argv), (*c1).run_in_background, (*c1).env, buff);
+        if ((strncmp(buff,"exit",4)==0) || (strncmp(buff,"quit",4)==0))
+            {
+          break;
+        }
 				memset(c1, 0, sizeof(*c1));
 				memset(buff, '\0', sizeof(buff));
 				free(c1);
@@ -139,6 +151,8 @@ int main (int argc, char **argv, char **envp)
 				strcpy(secondStr,token);
 				c1 = parse(firstStr, env);
 				c2 = parse(secondStr, env);
+
+				pipeFunc(&((*c1).argv), (*c1).run_in_background, (*c1).env, &((*c2).argv), (*c2).run_in_background, (*c2).env);
         if ((strncmp(firstStr,"exit",4)==0) || (strncmp(firstStr,"quit",4)==0))
             {
           break;
@@ -147,7 +161,7 @@ int main (int argc, char **argv, char **envp)
             {
           break;
         }
-				pipeFunc(&((*c1).argv), (*c1).run_in_background, (*c1).env, &((*c2).argv), (*c2).run_in_background, (*c2).env);
+
 				free(c1);
 				free(c2);
 				c1 = NULL;
@@ -169,6 +183,8 @@ int main (int argc, char **argv, char **envp)
                 {
 					strcpy(secondStr, token);
 				}
+
+				toFile(&((*c1).argv), (*c1).run_in_background, (*c1).env, secondStr);
         if ((strncmp(firstStr,"exit",4)==0) || (strncmp(firstStr,"quit",4)==0))
             {
           break;
@@ -177,7 +193,6 @@ int main (int argc, char **argv, char **envp)
             {
           break;
         }
-				toFile(&((*c1).argv), (*c1).run_in_background, (*c1).env, secondStr);
 				memset(firstStr, '\0', sizeof(char) * BYTESIZE);
 				memset(secondStr, '\0', sizeof(char) * BYTESIZE);
 				memset(buff, '\0', sizeof(buff));
