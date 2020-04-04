@@ -31,157 +31,105 @@ struct Job {
 
 static struct Job jobs[64];
 int job_count = 0;
-void parse_Input(char* command);
-//
-// static char* env;
-// static char* dir;
-// static struct Job jobs[64];
-// int job_count = 0;
-//
-//
-//
-//
-//
-// void display_jobs()
-// {
-// 	printf("\nCurrent Jobs:\n");
-// 	printf("Job ID, PID, Command\n\n");
-//
-// 		for(int i=0; i < job_count; i++){
-// 			if(waitpid(jobs[i].pid, NULL, WNOHANG) == 0 || (kill(jobs[i].pid, 0) == 0)){
-// 				printf("[%d] %d || %s\n\n", jobs[i].id, jobs[i].pid, jobs[i].cmd);
-// 			}
-// 		}
-// 	printf("\n");
-    // int i;
-    // printf("\nActive jobs:\n");
-    // printf("| %7s  | %7s | %7s |\n", "Job ID", "PID  ", "Command");
-    // for (i=0; i < job_count; i++)
-	// {
-    //     if (kill(jobs[i].pid, 0) == 0)
-	// 	{
-    //         printf("|  [%7d] | %7d | %7s |\n", jobs[i].id, jobs[i].pid, jobs[i].cmd);
-    //     }
-    // }
-//}
+void inputParse(char* command);
 
 
-void execBackgroundFunction(char* command){
+void runBackground(char* command)
+{
 	pid_t pid;
 	int status;
-
 	pid = fork();
-
-	//remove the &
 	int j, commandlen = strlen(command);
-	for (int i=j=0; i < commandlen; i++){
-		if(command[i] != '&'){
+	for (int i=j=0; i < commandlen; i++)
+	{
+		if(command[i] != '&')
+		{
 			command[j++] = command[i];
 		}
 	}
 	command[j-1] = '\0';
-
-	if(pid < 0){
-		printf("Error in executing background function");
+	if(pid < 0)
+	{
+		printf("Error!!");
 		exit(0);
 	}
 	if(pid == 0){
-		//child process
 		printf("\n[%d] %d Job running in background\n", job_count, getpid());
-		parse_Input(command);
-
+		inputParse(command);
 		printf("\n[%d] %d Job finished %s\nQUASH: %s : ", job_count, getpid(), command, getcwd(NULL,1024));
-
 	}
-	else {
+	else
+	{
 		struct Job new_job;
 		new_job.pid = pid;
 		new_job.id = job_count;
 		strcpy(new_job.cmd,command);
-
 		jobs[job_count] = new_job;
 		job_count++;
-
 	}
-	//waitpid(-1,NULL,WNOHANG);
 	waitpid(pid, &status, WNOHANG);
 }
 
-void parse_Input(char* command)
+
+void inputParse(char* command)
 {
-
-			/*------------------------
-			Check for background process
-			--------------------------*/
-
-				pid_t pid;
-				pid = fork();
-				int status;
-				char* args;
-
-				if (pid == 0) {
-					while ((command[0]) == ' ') {
-						command++;
-					}
-
-					command[strlen(command)] = '\0';
-
-					// check to see if there is an execuatable
-					//args = index(command, ' ');
-					if (index(command, ' ') == NULL) {
-						args = NULL;
-					}
-					else {
-						args = index(command, ' ');
-						args++;
-
-						// if there is an accedential space
-						if (args[0] == '\0') {
-							command[strlen(command)-1] ='\0';
-							args = NULL;
-						}
-						else {
-							args[strlen(args)] = '\0';
-						}
-
-
-					}
-
-					if (args == NULL) {
-
-						int success = execlp(command, command, NULL);
-						if (success == -1) {
-							exit(0);
-						}
-					}
-
-					/*----------
-						WITH
-						ARGS
-					-----------*/
-					else {
-						char* action;
-						//char space[] = ' ';
-						int i = 0;
-
-						action = strtok(command, " ");
-						action[strlen(action)] = '\0';
-						args[strlen(args)] = '\0';
-
-						int success = execlp(action, action, args, (char *)NULL);
-						//char* enviro = getenv("PATH");
-						//int success = execve(action, *args, envp[i]);
-
-						if (success == -1) {
-							printf("\nInvalid Command\nPerhaps the wrong arguments\nOr executable not found\n");
-							exit(0);
-						}
-					}
-				}
-				else {
-					wait(&status);
-				}
-				waitpid(pid, &status, 0);
+	pid_t pid;
+	pid = fork();
+	int status;
+	char* args;
+	if (pid == 0)
+	{
+		while ((command[0]) == ' ')
+		{
+			command++;
+		}
+		command[strlen(command)] = '\0';
+		if (index(command, ' ') == NULL)
+		{
+			args = NULL;
+		}
+		else
+		{
+			args = index(command, ' ');
+			args++;
+			if (args[0] == '\0')
+			{
+				command[strlen(command)-1] ='\0';
+				args = NULL;
+			}
+			else
+			{
+				args[strlen(args)] = '\0';
+			}
+		}
+		if (args == NULL)
+		{
+			int success = execlp(command, command, NULL);
+			if (success == -1)
+			{
+				exit(0);
+			}
+		}
+		else
+		{
+			char* action;
+			int i = 0;
+			action = strtok(command, " ");
+			action[strlen(action)] = '\0';
+			args[strlen(args)] = '\0';
+			int success = execlp(action, action, args, (char *)NULL);
+			if (success == -1)
+			{
+				printf("\nInvalid Command\nPerhaps the wrong arguments\nOr executable not found\n");
+				exit(0);
+			}
+		}
+	}
+	else
+	{
+		wait(&status);
+	}
+	waitpid(pid, &status, 0);
 }
 
 
@@ -203,6 +151,7 @@ void executive1(char ***argv, int background, char **env, char* input)
     else if (pid==0)
     {
 		errno = 0;
+
 		if (execvpe(**argv, *argv, env)==-1)
         {
 			printf("error: %s\n",strerror(errno));
@@ -274,62 +223,6 @@ int setPath(char* str)
 }
 
 
-char* removeWhitespace(char* str)
-{
-    char *buff;
-    while (isspace(*str)) //https://www.programiz.com/c-programming/library-function/ctype.h/isspace
-	{
-		str++;
-	}
-    if (*str == 0)
-	{
-		return str;
-	}
-    buff = str + strlen(str) - 1;
-    while (buff > str && isspace(*buff))
-	{
-		buff--;
-	}
-    *(buff + 1) = 0;
-    return str;
-}
-
-
-// void execute(char** str)
-// {
-//     int type;
-//     pid_t pid;
-//     pid = fork();
-//     if (pid == 0)
-// 	{
-//         if (strlen(str[0]) > 0)
-// 		{
-//             if (execvp(str[0], str) < 0)
-// 			{
-//                 fprintf(stderr, "Invalid command\n");
-//                 exit(0);
-//             }
-//         }
-// 		else
-// 		{
-//             if (execvp(str[0], NULL) < 0)
-// 			{
-//                 fprintf(stderr, "Invalid command\n");
-//                 exit(0);
-//             }
-//         }
-//     }
-//     else
-// 	{
-//         waitpid(pid, &type, 0);
-//         if (type == 1)
-// 		{
-//             fprintf(stderr, "%s\n", "Poo poo\n");
-//         }
-//     }
-// }
-
-
 
 void toFile(char ***argv, int background, char **env, char* path)
 {
@@ -345,6 +238,7 @@ void toFile(char ***argv, int background, char **env, char* path)
 	 {
 		errno = 0;
 		FILE *file_out;
+
 		file_out = fopen(path, "w");
 		dup2(fileno(file_out), STDOUT_FILENO);
 		fclose(file_out);
@@ -387,6 +281,7 @@ void fromFile(char ***argv, int background, char **env, char* path)
 	else if (pid==0)
 	{
 		errno = 0;
+
 		FILE *file_in;
 		file_in = fopen(path, "r");
 		dup2(fileno(file_in), STDIN_FILENO);
@@ -432,6 +327,7 @@ void pipeFunc(char ***argv1, int background1, char **env1, char ***argv2, int ba
 	else if (pid1 == 0)
 	{
 		errno = 0;
+
 		close(fds[0]);
 		dup2(fds[1], STDOUT_FILENO);
 		if (execvpe(**argv1, *argv1, env1) < 0)
@@ -464,6 +360,7 @@ void pipeFunc(char ***argv1, int background1, char **env1, char ***argv2, int ba
 	else if (pid1 == 0)
 	{
 		errno = 0;
+
 		close(fds[1]);
 		dup2(fds[0], STDIN_FILENO);
 		if (execvpe(**argv2, *argv2, env2) < 0)
