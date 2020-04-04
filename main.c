@@ -80,16 +80,17 @@ int main (int argc, char **argv, char **envp)
 			continue;
 		}
         else if (strncmp(buff, "set PATH=",9)==0)
-        {DIR* dir = opendir(buff);
-        if (dir) {
+        {
           buff+=9;
+          DIR* dir = opendir(buff);
+          if (dir) {
           setenv("PATH",buff,1);
           printf("PATH was set to %s\n", getenv("PATH"));
           closedir(dir);
-        }
-        else if (ENOENT == errno) {
+          }
+          else if (ENOENT == errno) {
           printf("PATH was not found\n");
-        }
+          }
 
 			continue;
 		}
@@ -99,9 +100,10 @@ int main (int argc, char **argv, char **envp)
 			continue;
 		}
         else if (strncmp(buff, "set HOME=",9)==0)
-        {DIR* dir = opendir(buff);
-          if (dir) {
+        {
           buff+=9;
+          DIR* dir = opendir(buff);
+          if (dir) {
           setenv("HOME",buff,1);
           printf("HOME was set to %s\n", getenv("HOME"));
           closedir(dir);
