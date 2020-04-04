@@ -1,4 +1,5 @@
 # Basic Linux Shell
+Made by Apurva Rai and Meet Kapadia
 # Quash
 Simple lite implementation of a shell
 # Build
