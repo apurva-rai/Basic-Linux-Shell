@@ -87,13 +87,13 @@ void execBackgroundFunction(char* command){
 	}
 	if(pid == 0){
 		//child process
-		printf("\n[%d] %d running in background\n", job_count, getpid());
+		printf("\n[%d] %d Job running in background\n", job_count, getpid());
 		parse_Input(command);
-		printf("\n[%d] %d finished %s\nQUASH: %s : ", job_count, getpid(), command, getcwd(NULL,1024));
-		exit(0);
+
+		printf("\n[%d] %d Job finished %s\nQUASH: %s : ", job_count, getpid(), command, getcwd(NULL,1024));
+
 	}
 	else {
-
 		struct Job new_job;
 		new_job.pid = pid;
 		new_job.id = job_count;
@@ -151,7 +151,6 @@ void parse_Input(char* command)
 
 						int success = execlp(command, command, NULL);
 						if (success == -1) {
-							printf("\nInvalid Command\nExecutable not found.\n");
 							exit(0);
 						}
 					}

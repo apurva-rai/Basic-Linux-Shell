@@ -20,16 +20,15 @@ void menu()
 
 /* Handles reading input from prompt
  */
-char* firstParse()
+char* firstParse(char* line, int& inFile)
 {
-    char* inputLine = NULL; //Get command line input from user
-char* removeNewLine;
-size_t charNum = 0;
-size_t size = 0; //Initial size for all arrays
-charNum = getline(&inputLine, &size, stdin);
-removeNewLine = strchr(inputLine, '\n');
-if (removeNewLine) *removeNewLine = 0; //gets rid of the newline char
-return(inputLine);
+	inFile = read(fd, line, BYTESIZE);
+	if (inFile <= 0)
+	{
+		close(fd);
+		read(0, line, BYTESIZE);
+	}
+	return line;
 }
 
 int main (int argc, char **argv, char **envp)
@@ -54,7 +53,7 @@ int main (int argc, char **argv, char **envp)
 		printf("%s> ",getcwd(NULL,0));
 		fflush(stdout);
 		memset(line, '\0', sizeof(line));
-		buff = firstParse();
+		buff = firstParse(line, inFile);
 		pipeU = strpbrk(buff, "|");
 		input = strpbrk(buff, "<");
 		output = strpbrk(buff, ">");
@@ -127,10 +126,9 @@ int main (int argc, char **argv, char **envp)
 		}
         else if (strncmp(buff, "jobs",4)==0)
         {
-            if(strncmp(buff,"jobs",4) == 0)
-        	{
+
         		printf("\nCurrent Jobs:\n");
-        		printf("Job ID, PID, Command\n\n");
+        		//printf("Job ID, PID, Command\n\n");
         		for(int i=0; i < job_count; i++)
         		{
         			if(waitpid(jobs[i].pid, NULL, WNOHANG) == 0 || (kill(jobs[i].pid, 0) == 0))
@@ -139,7 +137,7 @@ int main (int argc, char **argv, char **envp)
         			}
         		}
         		printf("\n");
-        	}
+
 		}
 
 	/*----------
