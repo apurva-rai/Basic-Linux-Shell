@@ -82,6 +82,11 @@ int main (int argc, char **argv, char **envp)
         else if (strncmp(buff, "set PATH=",9)==0)
         {
           buff+=9;
+          int c =strlen(buff);
+        	if (buff[c-1]=='\n')
+            {
+        		buff[c-1] = '\0';
+        	}
           DIR* dir = opendir(buff);
           if (dir) {
           setenv("PATH",buff,1);
@@ -102,6 +107,11 @@ int main (int argc, char **argv, char **envp)
         else if (strncmp(buff, "set HOME=",9)==0)
         {
           buff+=9;
+          int c =strlen(buff);
+        	if (buff[c-1]=='\n')
+            {
+        		buff[c-1] = '\0';
+        	}
           DIR* dir = opendir(buff);
           if (dir) {
           setenv("HOME",buff,1);
