@@ -124,15 +124,9 @@ int main (int argc, char **argv, char **envp)
 			#if 0
 			if ((output == NULL) && (pipeU == NULL) && (input == NULL))
             {
-        if ((strncmp(buff,"exit",4)==0) || (strncmp(buff,"quit",4)==0))
-            {
-                break;
-            }
+                printf("\n\nPIPE 3\n\n");
 				c1 = parse(buff, env);
-        if ((strncmp(buff,"exit",4)==0) || (strncmp(buff,"quit",4)==0))
-            {
-          break;
-        }
+
 				executive1(&((*c1).argv), (*c1).run_in_background, (*c1).env, buff);
         if ((strncmp(buff,"exit",4)==0) || (strncmp(buff,"quit",4)==0))
             {
@@ -147,6 +141,7 @@ int main (int argc, char **argv, char **envp)
 			}
 			if ((output == NULL) && (pipeU != NULL) && (input == NULL))
             {
+              printf("\n\nPIPE 1\n\n");
 				char* token = strtok(buff, "|\n");
 				char firstStr[BYTESIZE];
 				strcpy(firstStr,token);
@@ -177,6 +172,7 @@ int main (int argc, char **argv, char **envp)
 			}
 			if ((output != NULL) && (pipeU == NULL) && (input == NULL))
             {
+                printf("\n\nPIPE 2\n\n");
 				char *token = strtok(buff, ">\n");
 				char firstStr[256];
 				strcpy(firstStr, token);
